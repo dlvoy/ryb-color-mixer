@@ -19,7 +19,7 @@
 
     var rybColorMixer = {};
 
-    var defaults = { result: "ryb", hex: true };
+    var defaults = { input: "ryb", result: "ryb", hex: true };
 
     function mix() {
 
@@ -249,6 +249,57 @@
     function rybToRgbHex(color) {
         var rgb = rybToRgb(color);
         return arrayToHex(rgb);
+    }
+    
+    function rgbToRyb(color, options){
+
+        if (typeof color == "string") {
+            color = hexToArray(color);
+        }
+
+        var R = color[0] / 255;
+        var G = color[1] / 255;
+        var B = color[2] / 255;
+        
+        // Remove the whiteness from the color.
+    	var w = Math.min(R, Math.min(G, B));
+    	R -= w;
+    	G -= w;
+    	B -= w;
+    
+    	var mg = Math.max(R, Math.max(G, B));
+    
+    	// Get the yellow out of the red+green.
+    	var Y = Math.min(r, g);
+    	R -= Y;
+    	G -= Y;
+    
+    	// If this unfortunate conversion combines blue and green, then cut each in half to preserve the value's maximum range.
+    	if (B && G) {
+    		B /= 2.0;
+    		G /= 2.0;
+    	}
+    
+    	// Redistribute the remaining green.
+    	Y += G;
+    	B += G;
+    
+    	// Normalize to values.
+    	var my = Math.max(R, Math.max(Y, B));
+    	if (my) {
+    		var n = mg / my;
+    		R *= n;
+    		Y *= n;
+    		B *= n;
+    	}
+    
+    	// Add the white back in.
+    	R += w;
+    	Y += w;
+    	Y += w;
+        
+        var ret = [Math.ceil(255 * R), Math.ceil(255 * Y), Math.ceil(255 * B)];
+        return ret;
     }
 
     /**
