@@ -10,7 +10,7 @@ Usage:
     
     rybColorMixer.mix(color1, color2, color3.... [,options]);
     
-Where arrayOfColos is an array of hex rgb colors ['#ff0000', '#00ff00']. Example:
+Where arrayOfColos is an array of hex RYB colors ['#ff0000', '#00ff00']. Example:
 
     rybColorMixer.mix(['#ff0000', '#00ff00']);
 
